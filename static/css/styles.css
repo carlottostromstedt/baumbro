@@ -1,0 +1,33 @@
+body {
+    background-color: #51BD44;
+  }
+
+.login-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+h1 {
+    color:#fff;
+    font-family: 'Kanit', sans-serif;
+    font-size: 150px;
+}
+
+h6{
+    color: #fff;
+    font-family: 'Kanit', sans-serif;
+}
+
+.card-login{
+    width: 400px;
+}
+
+footer {
+    position: fixed; 
+    bottom: 0; 
+    width: 100%; 
+    text-align: center; 
+    background-color: #51BD44; 
+    color: #fff; 
+    padding: 10px; 
+  }

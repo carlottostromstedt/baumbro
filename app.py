@@ -13,25 +13,47 @@ users_db = {
 def index():
     if 'username' in session:
         return redirect(url_for('profil'))
-    return render_template('index.html')
+    return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=["GET", "POST"])
 def register():
-    if request.method == 'POST':
-        new_username = request.form['new_username']
-        new_password = request.form['new_password']
-        users_db[new_username] = new_password
-        return redirect(url_for('index'))
-    return render_template('register.html')
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+ 
+        if not username or not password:
+            error = 'Benutzername und Passwort dürfen nicht leer sein.'
+            return render_template("sign_up.html", error=error)
+ 
+        existing_user = Users.query.filter_by(username=username).first()
+ 
+        if existing_user:
+            error = 'Dieser Benutzername ist bereits vergeben. Bitte wählen Sie einen anderen.'
+            return render_template("sign_up.html", error=error)
+       
+        else:
+            user = Users(username=username, password=generate_password_hash(password))
+            db.session.add(user)
+            db.session.commit()
+        return redirect(url_for("login"))
+   
+    return render_template("sign_up.html")
 
-@app.route('/login', methods=['POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    username = request.form['username']
-    password = request.form['password']
-    if username in users_db and users_db[username] == password:
-        session['username'] = username
-        return redirect(url_for('profil'))
-    return redirect(url_for('index'))
+    error = None
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        user = Users.query.filter_by(username=username).first()
+ 
+        if user is not None and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for("home"))
+        else:
+            error= 'Benutzername oder Passwort ist ungültig'
+ 
+    return render_template("login.html", error=error)
 
 @app.route('/profil')
 def profil():
