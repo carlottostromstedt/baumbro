@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import trees;
-from flask import Flask
-=======
 from flask import Flask, render_template, request, url_for, redirect
->>>>>>> origin/main
+from flask_login import current_user
 
 app = Flask(__name__)
 
@@ -11,19 +8,43 @@ app = Flask(__name__)
 def hello_baum():
     return "<p>Hello, Baum!</p>"
 
-<<<<<<< HEAD
+@app.route('/upload_coordinates', methods=['POST'])
+def upload_coordinates():
+    if request.method == "POST":
+        user_lat = request.form.get('user_lat')
+        user_lon = request.form.get('user_lon')
+        requestObject = trees.Request(user_lat, user_lon, current_user.username)
+        db.session.add(requestObject)
+        db.session.commit
+    return render_template("upload_pic.html")
 
-@app.route('/upload_photo', methods=['POST'])
-def upload_photo():
-    user_lat = 0; # irgendwie Breitengrad holen 
-    user_lon = 0;# irgendwie Breitengrad holen
+#    execute_tree_search()
 
-    # Verwende die importierte Methode
-    nearest_tree = find_nearest_tree(float(user_lat), float(user_lon))
-
-    return f"Der nächste dokumentierte Baum ist: {nearest_tree['tree_name']} in einer Entfernung von {nearest_tree['distance']} km."
-=======
 @app.route("/extract")
 def extract_location():
     return render_template("extract.html")
->>>>>>> origin/main
+
+
+#   in arbeit
+@app.route('/upload', methods=['POST'])
+def upload_image():
+    trees.execute_tree_search()
+
+    uploaded_image = request.files['image']
+    if uploaded_image:
+        image_data = uploaded_image.read()
+        
+        image = Image.open(io.BytesIO(image_data))
+        
+        exif_data = image._getexif()
+        
+        if exif_data:
+            exif_data = {TAGS.get(tag, tag): value for tag, value in exif_data.items()}
+            if 'GPSInfo' in exif_data:
+                gps_info = {GPSTAGS.get(gps_tag, gps_tag): gps_value for gps_tag, gps_value in exif_data['GPSInfo'].items()}
+                latitude = gps_info.get('GPSLatitude')
+                longitude = gps_info.get('GPSLongitude')
+                return f"Latitude: {latitude}, Longitude: {longitude}"
+    
+    return "Keine GPS-Daten gefunden."
+
