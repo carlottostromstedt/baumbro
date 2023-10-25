@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - BaumBro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Willkommen, {{ username }}!</h1>
+        <div class="profil-container">
+            <div class="profil-content">
+                <p>Hallo, {{ username }}!</p>
+                <a href="/baum-suchen"><button>Baum suchen</button></a>
+            </div>
+        </div>
+    </header>
+    <footer>
+        <a href="#">Impressum</a>
+        <a href="#">Kontakt</a>
+        <a href="#">Über uns</a>
+    </footer>
+</body>
+</html>

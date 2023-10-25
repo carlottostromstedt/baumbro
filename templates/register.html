@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrieren - BaumBro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registrieren bei BaumBro</h1>
+        <div class="registration-container">
+            <div class="registration-form">
+                <h2>Registrieren</h2>
+                <form action="/register" method="post">
+                    <label for="new_username">Neuer Benutzername:</label>
+                    <input type="text" id="new_username" name="new_username" required>
+                    <br>
+                    <label for="new_password">Neues Passwort:</label>
+                    <input type="password" id="new_password" name="new_password" required>
+                    <br>
+                    <input type="submit" value="Registrieren">
+                </form>
+                <p>Bereits registriert? <a href="/">Hier anmelden</a></p>
+            </div>
+        </div>
+    </header>
+    <footer>
+        <a href="#">Impressum</a>
+        <a href="#">Kontakt</a>
+        <a href="#">Über uns</a>
+    </footer>
+</body>
+</html>
