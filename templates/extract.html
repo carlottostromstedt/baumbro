@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='js/extract.js') }}"></script>
+<h1>Extractor</h1>
+
+<p>Click the button to get your coordinates.</p>
+
+<button id="locationButton">Try It</button>
+
+<p id="locationDisplay"></p>
+{% endblock %}

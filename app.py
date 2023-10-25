@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, url_for
 
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Sie sollten einen sicheren Schlüssel verwenden
 
@@ -40,3 +41,7 @@ def profil():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route("/extract")
+def extract_location():
+    return render_template("extract.html")
