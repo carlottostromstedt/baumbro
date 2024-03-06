@@ -5,24 +5,23 @@
     <div class="row align-items-center">
         <div class="position-relative mw-md mx-auto pt-16 pb-12 pb-lg-32">
         <h1 class="mb-16 mb-md-32">Baumbro</h1>
-        <h6 class="fs-7 mb-10">Wieso du ein Baumbro werden solltest></h6>
+        <h6 class="fs-7 mb-10">Wieso du ein Baumbro werden solltest</h6>
         </div>
     </div>
     <div class="card card-login">
         <h2 class="card-header">LOGIN</h2>
-        <form action="/register" method="post">
-            <label for="new_username" class="mx-3" >Neuer Benutzername:</label>
-            <input type="text" class="mx-3" id="new_username" name="new_username" required>
+        <form action="/login" method="post">
+            <label for="username" class="mx-3" >Benutzername:</label>
+            <input type="text" class="mx-3" id="username" name="username" required>
             <br>
-            <label for="new_password" class="mx-3 my-2" >Neues Passwort:</label><br>
-            <input type="password" class="mx-3" id="new_password" name="new_password" required>
+            <label for="password" class="mx-3 my-2" >Passwort:</label><br>
+            <input type="password" class="mx-3" id="password" name="password" required>
             <br>
             <button type="submit" class="mx-3 my-2 btn w-10 mb-8 btn-primary shadow">submit</button>
             {% if error %}
                 <p class=error>{{ error }}
             {% endif %}
         </form>
-        <p class="mx-3">Bereits registriert? <a href="/">Hier anmelden</a></p>
     </div>
 </div>
 {% endblock %}

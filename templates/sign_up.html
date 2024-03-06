@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for post in posts %}
+<div class="bg-info-light position-relative overflow-hidden login-container"></div>
+    <div class="row align-items-center">
         <h1>Werde ein Baumbro</h1>
         <div class="registration-container">
             <div class="card">
                 <h2 class="card-header">Sign up</h2>
-                <form action="/sign_up" method="post">
+                <form action="/sign_up" method="POST">
                     <label for="new_username">Neuer Benutzername:</label>
                     <input type="text" id="new_username" name="new_username" required>
                     <br>
@@ -21,5 +22,6 @@
                 <p>Bereits registriert? <a href="/">Hier anmelden</a></p>
             </div>
         </div>
-    {% endfor %}
+    </div>
+</div>
 {% endblock %}
