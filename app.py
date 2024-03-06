@@ -120,55 +120,43 @@ if __name__ == '__main__':
 @app.route("/extract", methods=['GET', 'POST'])
 def extract_location():
     if request.method == "POST":
-        # longitude = request.form.get("longitude")
-        # latitude = request.form.get("latitude")
-        
-        if 'picture' not in request.files:
-            return 'No file part'
+        longitude_decimal = 0
+        latitude_decimal = 0
 
-        picture_file = request.files['picture']
-
-        if picture_file.filename == '':
-            return 'No selected file'
-        
-        img = Image.open(picture_file)
-        img_exif = img.getexif()
-        print(get_gps_info(picture_file))
-        xlatitude, xlongitude = get_gps_info(picture_file)
-        latitude_decimal = convert_to_decimal_degrees(xlatitude)
-        longitude_decimal = convert_to_decimal_degrees(xlongitude)
-
-        print("Latitude (Decimal Degrees):", latitude_decimal)
-        print("Longitude (Decimal Degrees):", longitude_decimal)
-        # <class 'PIL.Image.Exif'>
-        if img_exif is None:
-            print('Sorry, image has no exif data.')
+        if 'picture' in request.files:
+            print("Picture")
         else:
-            for key, val in img_exif.items():
-                if key in ExifTags.TAGS:
-                    print(f'{ExifTags.TAGS[key]}:{val}')
-                else:
-                    print(f'{key}:{val}')
+            print("NO PICTURE")
+        
+        if "longitude" in request.form and request.form.get("longitude") != "":
+            longitude_decimal = request.form.get("longitude")
+            latitude_decimal = request.form.get("latitude")
+        elif 'picture' in request.files:
+            print("IM ELIF BLOCK")
+            picture_file = request.files['picture']
+            longitude_decimal, latitude_decimal = get_coordinates(picture_file)
+
         query = Query(longitude = longitude_decimal, latitude = latitude_decimal)
         db.session.add(query)
         db.session.commit()
 
         markers=[
         {
-        'lat':latitude_decimal,
-        'lon':longitude_decimal,
-        'popup':'This is the middle of the map.'
-            }
+        "lat": 51.5074,
+        "lon": -0.1278,
+        "popup": "This is London, UK."
+        }
         ]
-        return redirect(url_for("query", id=query.id, query=query, xlongitude= longitude_decimal, xlatitude=latitude_decimal, markers = markers))
+        return redirect(url_for("query", id=query.id, query=query, longitude= longitude_decimal, latitude=latitude_decimal, markers = markers))
     else:
         return render_template("extract.html")
 
 @app.route('/query/<id>')
 def query(id):
     query = Query.query.filter_by(id=id).first_or_404()
+    markers = request.args.get('markers')
     baum = Trees.query.filter(text("ROUND(longitude, 1) = ROUND(:longitude, 1) AND ROUND(latitude, 1) = ROUND(:latitude, 1)")).params(longitude=query.longitude, latitude=query.latitude).first_or_404()
-    return render_template("query.html", query=query, baum=baum)
+    return render_template("query.html", query=query, baum=baum, markers=markers)
 
 def get_exif_data(image):
     exif_data = {}
@@ -200,3 +188,25 @@ def convert_to_decimal_degrees(coord):
     degrees, minutes, seconds = coord
     decimal_degrees = degrees + (minutes / 60.0) + (seconds / 3600.0)
     return decimal_degrees
+
+def get_coordinates(picture_file):
+        img = Image.open(picture_file)
+        img_exif = img.getexif()
+        print(img_exif)
+        print(get_gps_info(picture_file))
+        latitude, longitude = get_gps_info(picture_file)
+        latitude_decimal = convert_to_decimal_degrees(latitude)
+        longitude_decimal = convert_to_decimal_degrees(longitude)
+
+        print("Latitude (Decimal Degrees):", latitude_decimal)
+        print("Longitude (Decimal Degrees):", longitude_decimal)
+        # <class 'PIL.Image.Exif'>
+        if img_exif is None:
+            print('Sorry, image has no exif data.')
+        else:
+            for key, val in img_exif.items():
+                if key in ExifTags.TAGS:
+                    print(f'{ExifTags.TAGS[key]}:{val}')
+                else:
+                    print(f'{key}:{val}')
+        return longitude_decimal, latitude_decimal
