@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="bg-info-light position-relative overflow-hidden login-container"></div>
+<div class="bg-info-light position-relative overflow-hidden login-container">
     <div class="row align-items-center">
-        <h1>Werde ein Baumbro</h1>
-        <div class="registration-container">
-            <div class="card">
-                <h2 class="card-header">Sign up</h2>
-                <form action="/sign_up" method="POST">
-                    <label for="new_username">Neuer Benutzername:</label>
-                    <input type="text" id="new_username" name="new_username" required>
-                    <br>
-                    <label for="new_password">Neues Passwort:</label>
-                    <input type="password" id="new_password" name="new_password" required>
-                    <br>
-                    <button type="submit" class="btn btn-outline-success">sign up</button>
-                    {% if error %}
-                        <p class=error>{{ error }}
-                    {% endif %}
-                </form>
-                <p>Bereits registriert? <a href="/">Hier anmelden</a></p>
-            </div>
+        <div class="position-relative mw-md mx-auto pt-16 pb-12 pb-lg-32">
+            <h1 class="mb-16 mb-md-32">Baumbro</h1>
+            <h6 class="fs-7 mb-10">Werde ein Baumbro</h6>
         </div>
+    </div>
+    <div class="card card-login">
+        <h2 class="card-header">SIGN UP</h2> <!-- Änderung: Überschrift für den Signup-Kasten -->
+        <form action="/sign_up" method="POST">
+            <label for="new_username" class="mx-3">Neuer Benutzername:</label>
+            <input type="text" class="mx-3" id="new_username" name="new_username" required>
+            <br>
+            <label for="new_password" class="mx-3 my-2">Neues Passwort:</label><br>
+            <input type="password" class="mx-3" id="new_password" name="new_password" required>
+            <br>
+            <button type="submit" class="mx-3 my-2 btn w-10 mb-8 btn-primary shadow">sign up</button>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </form>
     </div>
 </div>
 {% endblock %}
