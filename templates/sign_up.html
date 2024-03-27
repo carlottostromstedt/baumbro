@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    <div class="bg-info-light position-relative overflow-hidden login-container">
+<div class="container">
+    <div class="bild">
+            <img src="static/baumundlogo.png" alt="baum">
+    </div>
+    <div class ="kaste">
+    <div class="bg-info-light position-relative overflow-hidden login-container" style="width: 600px;">
         <div class="row align-items-center">
-            <div class="position-relative mw-md mx-auto pt-16 pb-12 pb-lg-32">
-            <h1 class="mb-16 mb-md-32">Baumbro</h1>
-            <h6 class="fs-7 mb-10">Werde ein Baumbro</h6>
-            </div>
         </div>
             <div class="card card-login">
                 <h2 class="card-header">SIGN UP</h2>
@@ -25,8 +25,5 @@
                 </form>
                 <p class="mx-3">Bereits registriert? <a href="/login">Hier anmelden</a></p>
             </div>
-        </div>
-        <div class="baum">
-            <img src="static/baum.png" width="720" height="720" alt="baum">
-        </div>
+</div>
 {% endblock %}
