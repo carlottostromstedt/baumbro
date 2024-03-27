@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from sqlalchemy import text
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 
 app = Flask(__name__)
@@ -9,10 +11,18 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 
 db = SQLAlchemy()
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 class Query(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     longitude = db.Column(db.Float, nullable=False)
     latitude  = db.Column(db.Float, nullable=False)
+
+class Users(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
 
 class Trees(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,22 +70,27 @@ with app.app_context():
 # with app.app_context():
 #     fill_db()
 
+@login_manager.user_loader
+def loader_user(user_id):
+	return Users.query.get(user_id)
+
+
 @app.route('/')
 def index():
     if 'username' in session:
         return redirect(url_for('profil'))
     return render_template('login.html')
 
-@app.route('/register', methods=["GET", "POST"])
-def register():
+@app.route('/sign_up', methods=["GET", "POST"])
+def sign_up():
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form.get("new_username")
+        password = request.form.get("new_password")
  
         if not username or not password:
             error = 'Benutzername und Passwort dürfen nicht leer sein.'
             return render_template("sign_up.html", error=error)
- 
+
         existing_user = Users.query.filter_by(username=username).first()
  
         if existing_user:
@@ -100,9 +115,10 @@ def login():
  
         if user is not None and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for("home"))
+            return render_template("extract.html")
         else:
-            error= 'Benutzername oder Passwort ist ungültig'
+            error= 'Benutzername und Passwort dürfen nicht leer sein.t ungültig'
+            return render_template("login.html", error=error)
  
     return render_template("login.html", error=error)
 
