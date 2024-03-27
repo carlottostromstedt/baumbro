@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% for baum in baeume %}
+
 <h1>{{ baum.name }}</h1>
 <h3>Hello {{request.args.get('xlongitude')}}</h3>
 <h3>Hello {{request.args.get('xlatitude')}}</h3>
@@ -11,7 +14,7 @@
 <h3>{{ baum.kategorie }}</h3>
 <h3>{{ baum.baumnamedeu }}</h3>
 
-<h3>Hello {{ markers[0]['lat']}}</h3>
+{% endfor %}
 
 <div id="map" style="height: 600px;"></div>
 <script src="{{ url_for('static', filename='js/universal.js') }}">
@@ -37,5 +40,25 @@ if (isNaN(latitude) || isNaN(longitude)) {
 }
 </script>
 
+
+{% for baum in baeume %}
+    <script>
+        // Get latitude and longitude parameters from the `baum` object
+        var latitude = {{ baum.latitude }};
+        var longitude = {{ baum.longitude }};
+        
+        // Check if latitude and longitude are valid
+        if (isNaN(latitude) || isNaN(longitude)) {
+            console.error('Latitude or longitude is invalid');
+        } else {
+            console.log('Latitude:', latitude);
+            console.log('Longitude:', longitude);
+        
+            // Assuming `map` is your Leaflet map object
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('{{ baum.baumnamedeu }}').openPopup();
+        }
+    </script>
+{% endfor %}
 
 {% endblock %}

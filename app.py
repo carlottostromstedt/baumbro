@@ -1,20 +1,20 @@
 from flask import Flask, render_template, redirect, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
+from location_utilities import *
 import json
 from PIL import Image, ExifTags
 from PIL.ExifTags import TAGS, GPSTAGS
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Sie sollten einen sicheren Schlüssel verwenden
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 
-db = SQLAlchemy()
+if __name__ == '__main__':
+    app.run(debug=True)
 
-class Query(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude  = db.Column(db.Float, nullable=False)
+db = SQLAlchemy()
 
 class Trees(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -114,9 +114,6 @@ def profil():
         return render_template('profil.html', username=session['username'])
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @app.route("/extract", methods=['GET', 'POST'])
 def extract_location():
     if request.method == "POST":
@@ -136,10 +133,6 @@ def extract_location():
             picture_file = request.files['picture']
             longitude_decimal, latitude_decimal = get_coordinates(picture_file)
 
-        query = Query(longitude = longitude_decimal, latitude = latitude_decimal)
-        db.session.add(query)
-        db.session.commit()
-
         markers=[
         {
         "lat": 51.5074,
@@ -147,66 +140,29 @@ def extract_location():
         "popup": "This is London, UK."
         }
         ]
-        return redirect(url_for("query", id=query.id, query=query, longitude= longitude_decimal, latitude=latitude_decimal, markers = markers))
+        return redirect(url_for("query", longitude= longitude_decimal, latitude=latitude_decimal, markers = markers))
     else:
         return render_template("extract.html")
 
-@app.route('/query/<id>')
-def query(id):
-    query = Query.query.filter_by(id=id).first_or_404()
+# @app.route('/query/<id>')
+# def query(id):
+#     query = Query.query.filter_by(id=id).first_or_404()
+#     markers = request.args.get('markers')
+#     longitude_dictionary = calculate_query_values(query.longitude, query.latitude, 200)
+
+#     b = Trees.query.filter(text("ROUND(longitude, 1) = ROUND(:longitude, 1) AND ROUND(latitude, 1) = ROUND(:latitude, 1)")).params(longitude=query.longitude, latitude=query.latitude).first_or_404()
+#     return render_template("query.html", query=query, baum=baum, markers=markers)
+
+@app.route('/query')
+def query():
     markers = request.args.get('markers')
-    baum = Trees.query.filter(text("ROUND(longitude, 1) = ROUND(:longitude, 1) AND ROUND(latitude, 1) = ROUND(:latitude, 1)")).params(longitude=query.longitude, latitude=query.latitude).first_or_404()
-    return render_template("query.html", query=query, baum=baum, markers=markers)
+    longitude = float(request.args.get('longitude'))
+    latitude = float(request.args.get('latitude'))
+    location_dictionary = calculate_query_values(longitude, latitude, 200)
 
-def get_exif_data(image):
-    exif_data = {}
-    info = image._getexif()
-    if info:
-        for tag, value in info.items():
-            decoded = TAGS.get(tag, tag)
-            exif_data[decoded] = value
-            if decoded == "GPSInfo":
-                gps_info = {}
-                for t in value:
-                    sub_decoded = GPSTAGS.get(t, t)
-                    gps_info[sub_decoded] = value[t]
-                exif_data[decoded] = gps_info
-    return exif_data
+    baeume = Trees.query.filter(
+        Trees.latitude.between(location_dictionary['minLatitude'], location_dictionary['maxLatitude']),
+        Trees.longitude.between(location_dictionary['minLongitude'], location_dictionary['maxLongitude'])
+    ).all()
 
-def get_gps_info(image_path):
-    with Image.open(image_path) as img:
-        exif_data = get_exif_data(img)
-        if "GPSInfo" in exif_data:
-            gps_info = exif_data["GPSInfo"]
-            if "GPSLatitude" in gps_info and "GPSLongitude" in gps_info:
-                latitude = gps_info["GPSLatitude"]
-                longitude = gps_info["GPSLongitude"]
-                return latitude, longitude
-    return None, None
-
-def convert_to_decimal_degrees(coord):
-    degrees, minutes, seconds = coord
-    decimal_degrees = degrees + (minutes / 60.0) + (seconds / 3600.0)
-    return decimal_degrees
-
-def get_coordinates(picture_file):
-        img = Image.open(picture_file)
-        img_exif = img.getexif()
-        print(img_exif)
-        print(get_gps_info(picture_file))
-        latitude, longitude = get_gps_info(picture_file)
-        latitude_decimal = convert_to_decimal_degrees(latitude)
-        longitude_decimal = convert_to_decimal_degrees(longitude)
-
-        print("Latitude (Decimal Degrees):", latitude_decimal)
-        print("Longitude (Decimal Degrees):", longitude_decimal)
-        # <class 'PIL.Image.Exif'>
-        if img_exif is None:
-            print('Sorry, image has no exif data.')
-        else:
-            for key, val in img_exif.items():
-                if key in ExifTags.TAGS:
-                    print(f'{ExifTags.TAGS[key]}:{val}')
-                else:
-                    print(f'{key}:{val}')
-        return longitude_decimal, latitude_decimal
+    return render_template("query.html", query=query, baeume=baeume, markers=markers)
