@@ -41,24 +41,34 @@ if (isNaN(latitude) || isNaN(longitude)) {
 </script>
 
 
-{% for baum in baeume %}
-    <script>
+<script>
+    // Iterate over the baeume array
+    {% for baum in baeume %}
         // Get latitude and longitude parameters from the `baum` object
         var latitude = {{ baum.latitude }};
         var longitude = {{ baum.longitude }};
         
         // Check if latitude and longitude are valid
-        if (isNaN(latitude) || isNaN(longitude)) {
-            console.error('Latitude or longitude is invalid');
-        } else {
+        if (!isNaN(latitude) && !isNaN(longitude)) {
             console.log('Latitude:', latitude);
             console.log('Longitude:', longitude);
-        
-            // Assuming `map` is your Leaflet map object
-            L.marker([latitude, longitude]).addTo(map)
-                .bindPopup('{{ baum.baumnamedeu }}').openPopup();
+            
+            // Create a marker with popup
+            var marker = L.marker([latitude, longitude], { title: "{{ baum.baumnamedeu }}", riseOnHover: true, interactive: true }).addTo(map);
+            marker.bindPopup("<b>{{ baum.baumnamedeu }}</b><br>{{ baum.baumnummer }}");
+            
+            // Create a closure to capture the current marker
+            (function(marker) {
+                // Add click event listener to the marker
+                marker.on('click', function(e) {
+                    marker.openPopup();
+                });
+            })(marker);
+        } else {
+            console.error('Latitude or longitude is invalid');
         }
-    </script>
-{% endfor %}
+    {% endfor %}
+</script>
+
 
 {% endblock %}

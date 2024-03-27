@@ -1,5 +1,5 @@
 // Create map centered on Zurich
-var map = L.map('map').setView([47.3769, 8.5417], 12); // Zurich coordinates: [latitude, longitude]
+var map = L.map('map').setView([47.3769, 8.5417], 20); // Zurich coordinates: [latitude, longitude]
 
 // Add OpenStreetMap tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
