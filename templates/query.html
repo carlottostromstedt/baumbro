@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<div class="d-flex mt-4">
+<div class="d-flex outer-container mt-4">
 
-<div style="width: 50%; height: 78vh;" class="mb-4">
-    <div id="map" class="mx-4" style="height: 78vh;"></div>
+<div class="map-container mb-4">
+    <div id="map" class="mx-4"></div>
 </div>
 
-<div class="baueme-container" style="height: 82vh; width: 45%; overflow: auto">
+<div class="baueme-container" >
 {% for baum in baeume %}
 
 <div class="inner-container">
