@@ -117,6 +117,11 @@ footer {
     padding-top:100;
 }
 
+.extract-container{
+    display: flex;
+    justify-content: center;
+}
+
 .inner-container {
     padding: 10px;
     margin-left: 25px;

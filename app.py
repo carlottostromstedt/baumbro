@@ -17,7 +17,7 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 db = SQLAlchemy()
-=======
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
