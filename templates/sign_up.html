@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for post in posts %}
-        <h1>Werde ein Baumbro</h1>
-        <div class="registration-container">
-            <div class="card">
-                <h2 class="card-header">Sign up</h2>
+<div class="container">
+    <div class="bild">
+        <img src="static/baumundlogo.png" alt="baum" style="width: 120%; height: auto;">
+    </div>
+    <div class ="kaste">
+    <div class="bg-info-light position-relative overflow-hidden login-container" style="width: 600px;">
+        <div class="row align-items-center">
+        </div>
+            <div class="card card-login">
+                <h2 class="card-header">SIGN UP</h2>
                 <form action="/sign_up" method="post">
                     <label for="new_username">Neuer Benutzername:</label>
                     <input type="text" id="new_username" name="new_username" required>
@@ -13,13 +18,14 @@
                     <label for="new_password">Neues Passwort:</label>
                     <input type="password" id="new_password" name="new_password" required>
                     <br>
-                    <button type="submit" class="btn btn-outline-success">sign up</button>
+                    <button type="submit" class="mx-3 my-2 btn w-10 mb-8 btn-primary shadow">sign up</button>
                     {% if error %}
                         <p class=error>{{ error }}
                     {% endif %}
                 </form>
-                <p>Bereits registriert? <a href="/">Hier anmelden</a></p>
+                <p class="mx-3">Bereits registriert? <a href="/login">Hier anmelden</a></p>
             </div>
         </div>
-    {% endfor %}
+    </div>
+</div>
 {% endblock %}
