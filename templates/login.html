@@ -1,28 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="bg-info-light position-relative overflow-hidden login-container">
-    <div class="row align-items-center">
-        <div class="position-relative mw-md mx-auto pt-16 pb-12 pb-lg-32">
-        <h1 class="mb-16 mb-md-32">Baumbro</h1>
-        <h6 class="fs-7 mb-10">Wieso du ein Baumbro werden solltest></h6>
+<div class="container-login">
+    <div class="bild">
+            <img src="static/baumundlogo.png" alt="baum" style="width: 55vw;">
+    </div>
+    <div class ="kaste">
+        <div class="bg-info-light login-container">
+            <div class="row align-items-center">
+            </div>
+                <div class="card card-login">
+                    <h2 class="card-header">LOGIN</h2>
+                    <form action="/login" method="post">
+                        <label for="username" class="mx-3" >Benutzername:</label>
+                        <input type="text" class="mx-3" id="username" name="username" required>
+                        <br>
+                        <label for="password" class="mx-3 my-2" >Passwort:</label><br>
+                        <input type="password" class="mx-3" id="password" name="password" required>
+                        <br>
+                        <button type="submit" class="mx-3 my-2 btn w-10 mb-8 btn-primary shadow">submit</button>
+                        {% if error %}
+                            <p class=error>{{ error }}
+                        {% endif %}
+                    </form>
+                    <p class="mx-3">Noch kein Konto? <a href="/sign_up">Hier registrieren</a></p>
+                </div>
         </div>
     </div>
-    <div class="card card-login">
-        <h2 class="card-header">LOGIN</h2>
-        <form action="/register" method="post">
-            <label for="new_username" class="mx-3" >Neuer Benutzername:</label>
-            <input type="text" class="mx-3" id="new_username" name="new_username" required>
-            <br>
-            <label for="new_password" class="mx-3 my-2" >Neues Passwort:</label><br>
-            <input type="password" class="mx-3" id="new_password" name="new_password" required>
-            <br>
-            <button type="submit" class="mx-3 my-2 btn w-10 mb-8 btn-primary shadow">submit</button>
-            {% if error %}
-                <p class=error>{{ error }}
-            {% endif %}
-        </form>
-        <p class="mx-3">Bereits registriert? <a href="/">Hier anmelden</a></p>
-    </div>
-</div>
+</div>    
+
 {% endblock %}
