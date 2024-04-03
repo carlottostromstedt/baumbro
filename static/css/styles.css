@@ -116,3 +116,20 @@ footer {
 .card.card-login{
     padding-top:100;
 }
+
+.extract-container{
+    display: flex;
+    justify-content: center;
+}
+
+.inner-container {
+    padding: 10px;
+    margin-left: 25px;
+    margin-bottom: 5px;
+    margin-right: 45px;
+    border-style: solid;
+}
+
+.inner-container:hover{
+    background-color: #5dd250b1
+}

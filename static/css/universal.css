@@ -1,0 +1,11 @@
+body {
+    padding: 0;
+    margin: 0;
+    }
+    html, body, #map {
+    height: 50%;
+    }
+
+img.huechange { 
+    filter: hue-rotate(120deg);
+}

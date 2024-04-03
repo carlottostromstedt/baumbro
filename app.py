@@ -3,21 +3,26 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
+from location_utilities import *
 import json
+from PIL import Image, ExifTags
+from PIL.ExifTags import TAGS, GPSTAGS
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Sie sollten einen sicheren Schlüssel verwenden
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 db = SQLAlchemy()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-class Query(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude  = db.Column(db.Float, nullable=False)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -128,23 +133,55 @@ def profil():
         return render_template('profil.html', username=session['username'])
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @app.route("/extract", methods=['GET', 'POST'])
 def extract_location():
     if request.method == "POST":
-        longitude = request.form.get("longitude")
-        latitude = request.form.get("latitude")
-        query = Query(longitude = longitude, latitude = latitude)
-        db.session.add(query)
-        db.session.commit()
-        return redirect(url_for("query", id=query.id, query=query))
+        longitude_decimal = 0
+        latitude_decimal = 0
+
+        if 'picture' in request.files:
+            print("Picture")
+        else:
+            print("NO PICTURE")
+        
+        if "longitude" in request.form and request.form.get("longitude") != "":
+            longitude_decimal = request.form.get("longitude")
+            latitude_decimal = request.form.get("latitude")
+        elif 'picture' in request.files:
+            print("IM ELIF BLOCK")
+            picture_file = request.files['picture']
+            longitude_decimal, latitude_decimal = get_coordinates(picture_file)
+
+        markers=[
+        {
+        "lat": 51.5074,
+        "lon": -0.1278,
+        "popup": "This is London, UK."
+        }
+        ]
+        return redirect(url_for("query", longitude= longitude_decimal, latitude=latitude_decimal, markers = markers))
     else:
         return render_template("extract.html")
 
-@app.route('/query/<id>')
-def query(id):
-    query = Query.query.filter_by(id=id).first_or_404()
-    baum = Trees.query.filter(text("ROUND(longitude, 1) = ROUND(:longitude, 1) AND ROUND(latitude, 1) = ROUND(:latitude, 1)")).params(longitude=query.longitude, latitude=query.latitude).first_or_404()
-    return render_template("query.html", query=query, baum=baum)
+# @app.route('/query/<id>')
+# def query(id):
+#     query = Query.query.filter_by(id=id).first_or_404()
+#     markers = request.args.get('markers')
+#     longitude_dictionary = calculate_query_values(query.longitude, query.latitude, 200)
+
+#     b = Trees.query.filter(text("ROUND(longitude, 1) = ROUND(:longitude, 1) AND ROUND(latitude, 1) = ROUND(:latitude, 1)")).params(longitude=query.longitude, latitude=query.latitude).first_or_404()
+#     return render_template("query.html", query=query, baum=baum, markers=markers)
+
+@app.route('/query')
+def query():
+    markers = request.args.get('markers')
+    longitude = float(request.args.get('longitude'))
+    latitude = float(request.args.get('latitude'))
+    location_dictionary = calculate_query_values(longitude, latitude, 200)
+
+    baeume = Trees.query.filter(
+        Trees.latitude.between(location_dictionary['minLatitude'], location_dictionary['maxLatitude']),
+        Trees.longitude.between(location_dictionary['minLongitude'], location_dictionary['maxLongitude'])
+    ).all()
+
+    return render_template("query.html", query=query, baeume=baeume, markers=markers)
