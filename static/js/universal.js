@@ -1,5 +1,9 @@
 // Create map centered on Zurich
-var map = L.map('map').setView([47.3769, 8.5417], 20); // Zurich coordinates: [latitude, longitude]
+var urlParams = new URLSearchParams(window.location.search);
+var latitude = parseFloat(urlParams.get('latitude'));
+var longitude = parseFloat(urlParams.get('longitude'));
+
+var map = L.map('map').setView([latitude, longitude], 20); // Zurich coordinates: [latitude, longitude]
 
 // Add OpenStreetMap tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -7,9 +11,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Get latitude and longitude parameters from the URL
-var urlParams = new URLSearchParams(window.location.search);
-var latitude = parseFloat(urlParams.get('latitude'));
-var longitude = parseFloat(urlParams.get('longitude'));
+
 
 // Check if latitude and longitude are valid
 if (!isNaN(latitude) && !isNaN(longitude)) {
@@ -18,8 +20,9 @@ if (!isNaN(latitude) && !isNaN(longitude)) {
 
     // Add marker for provided latitude and longitude
     L.marker([latitude, longitude]).addTo(map)
-        .bindPopup("Popup content here")
-        .openPopup();
+        .bindPopup("You are here")
+        .openPopup()
+        ._icon.classList.add("huechange");
 } else {
     console.error('Invalid latitude or longitude provided.');
 }

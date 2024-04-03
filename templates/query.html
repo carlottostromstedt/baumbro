@@ -2,42 +2,27 @@
 
 {% block content %}
 
+<div class="d-flex mt-4">
+
+<div style="width: 50%; height: 85vh;">
+    <div id="map" class="mx-4" style="height: 82vh;"></div>
+</div>
+
+<div class="baueme-container" style="height: 82vh; width: 45%; overflow: auto">
 {% for baum in baeume %}
 
-<h1>{{ baum.name }}</h1>
-<h3>Hello {{request.args.get('xlongitude')}}</h3>
-<h3>Hello {{request.args.get('xlatitude')}}</h3>
-<h3>Hello {{request.args.get('markers')}}</h3>
-
-<h3>{{ baum.latitude }}</h3>
-<h3>{{ baum.longitude }}</h3>
-<h3>{{ baum.kategorie }}</h3>
-<h3>{{ baum.baumnamedeu }}</h3>
-
+<div class="inner-container">
+    <h3>{{ baum.baumnamedeu }}</h3>
+    <h3>{{ baum.baumnummer }}</h3>
+    <h3>{{ baum.latitude }}</h3>
+    <h3>{{ baum.longitude }}</h3>
+    <h3>{{ baum.kategorie }}</h3>
+</div>
 {% endfor %}
+</div>
+</div>
 
-<div id="map" style="height: 600px;"></div>
 <script src="{{ url_for('static', filename='js/universal.js') }}">
-</script>
-
-<script>
-// Get latitude and longitude parameters from the URL
-var urlParams = new URLSearchParams(window.location.search);
-var latitude = parseFloat(urlParams.get('latitude'));
-var longitude = parseFloat(urlParams.get('longitude'));
-
-// Check if latitude and longitude are valid
-if (isNaN(latitude) || isNaN(longitude)) {
-    console.error('Latitude or longitude is invalid');
-} else {
-    console.log('Latitude:', latitude);
-    console.log('Longitude:', longitude);
-
-    // Assuming `map` is your Leaflet map object
-    L.marker([latitude, longitude]).addTo(map)
-        .bindPopup("Popup content here")
-        .openPopup();
-}
 </script>
 
 
@@ -62,6 +47,7 @@ if (isNaN(latitude) || isNaN(longitude)) {
                 // Add click event listener to the marker
                 marker.on('click', function(e) {
                     marker.openPopup();
+                    
                 });
             })(marker);
         } else {

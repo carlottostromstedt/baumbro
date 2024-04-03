@@ -5,3 +5,7 @@ body {
     html, body, #map {
     height: 50%;
     }
+
+img.huechange { 
+    filter: hue-rotate(120deg);
+}
