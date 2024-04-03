@@ -45,6 +45,7 @@ body {
     background-color: #51BD44;
     padding: 10px 0;
     border-bottom: 1px solid #51BD44;
+    height: 100px;
 }
 
 .navbar-brand {
@@ -61,6 +62,10 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    position: absolute;
+    top: 10px;
+    right:20px;
+    margin:20px;
 }
 
 .nav-list li {
@@ -89,10 +94,25 @@ footer {
     width: 100%;
 }
 
-.container {
+.container-login {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-left:0%;
-    margin: 0;
+    width: 100vw;
   }
+
+.bild {
+    
+}
+
+.kaste {
+    padding-top: 30;
+    align-items:center;
+    width: 50vw;
+    display: flex;
+    justify-content: center;
+}
+
+.card.card-login{
+    padding-top:100;
+}

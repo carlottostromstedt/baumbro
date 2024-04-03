@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container-login">
     <div class="bild">
-            <img src="static/baumundlogo.png" alt="baum">
+            <img src="static/baumundlogo.png" alt="baum" style="width: 55vw;">
     </div>
     <div class ="kaste">
-        <div class="bg-info-light position-relative overflow-hidden login-container" style="width: 600px;">
+        <div class="bg-info-light login-container">
             <div class="row align-items-center">
             </div>
                 <div class="card card-login">
@@ -25,6 +25,8 @@
                     </form>
                     <p class="mx-3">Noch kein Konto? <a href="/sign_up">Hier registrieren</a></p>
                 </div>
+        </div>
     </div>
+</div>    
 
 {% endblock %}
