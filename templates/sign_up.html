@@ -3,20 +3,20 @@
 {% block content %}
 <div class="container-login">
     <div class="bild">
-        <img src="static/baumundlogo.png" alt="baum" style="width: 70vw; height: 85vh">
+        <img src="static/baumundlogo.png" alt="baum">
     </div>
     <div class ="kaste">
     <div class="bg-info-light login-container">
         <div class="row align-items-center">
         </div>
-            <div class="card card-login" style="height: 300px">
+            <div class="card card-login">
                 <h2 class="card-header">SIGN UP</h2>
                 <form action="/sign_up" method="post" class="ml-2 mt-4">
-                    <label for="new_username">Neuer Benutzername:</label>
-                    <input type="text" id="new_username" name="new_username" required>
+                    <label for="new_username" class="mx-3">Neuer Benutzername:</label>
+                    <input type="text" class="mx-3" id="new_username" name="new_username" required>
                     <br>
-                    <label for="new_password">Neues Passwort:</label>
-                    <input type="password" id="new_password" name="new_password" required>
+                    <label for="new_password" class="mx-3 my-2">Neues Passwort:</label><br>
+                    <input type="password" class="mx-3" id="new_password" name="new_password" required>
                     <br>
                     <button type="submit" class="mx-3 my-2 btn w-10 mb-8 btn-primary shadow">sign up</button>
                     {% if error %}

@@ -1,5 +1,6 @@
 body {
     background-color: #51BD44;
+    height: 100vh
   }
 
 .login-container{
@@ -23,65 +24,17 @@ h6{
     
 }
 
-footer {
-    position: fixed; 
-    bottom: 0; 
-    width: 100%; 
-    text-align: center; 
-    background-color: #51BD44; 
-    color: #fff; 
-    padding: 10px; 
-  }
-  /* styles.css */
+.bild {
+    width: 70vw; 
+    height: 85vh;
+}
+
 
 body {
     font-family: 'Kanit', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-.navbar {
-    background-color: #51BD44;
-    padding: 10px 0;
-    border-bottom: 1px solid #51BD44;
-    height: 100px;
-}
-
-.navbar-brand {
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.navbar-brand:hover {
-    color: #ecf0f1;
-}
-
-.nav-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 10px;
-    right:20px;
-    margin:20px;
-}
-
-.nav-list li {
-    display: inline-block;
-    margin-right: 20px;
-}
-
-.nav-list a {
-    text-decoration: none;
-    color: #ecf0f1;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.nav-list a:hover {
-    color: #bdc3c7;
 }
 
 footer {
@@ -132,4 +85,58 @@ footer {
 
 .inner-container:hover{
     background-color: #5dd250b1
+}
+
+.navbar-brand {
+    font-size: 36px;
+}
+
+.nav-item{
+    font-size: 24px;
+}
+
+.page-title {
+    font-size: 120px;
+}
+
+@media only screen and (max-width: 600px) {
+    .page-title {
+        padding-top: 25px;
+        font-size: 64px;
+    }
+
+    .nav-item {
+        font-size: 20px;
+    }
+
+    .container-login{
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-between;
+        height: 100vh;
+    }
+
+    .bild {
+        width: 100vw;
+        display: flex;
+        justify-content: end;
+    }
+
+    .bild > img{
+        height: 35vh;
+        width: 100vw;
+    }
+
+    .kaste {
+        padding-top: 20px;
+        width: 100vw;
+    }
+
+    .login-container {
+        width: 100vw;
+    }
+
+    .card-login {
+        width: 90vw;
+    }
 }
