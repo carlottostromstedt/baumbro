@@ -185,3 +185,8 @@ def query():
     ).all()
 
     return render_template("query.html", query=query, baeume=baeume, markers=markers)
+
+@app.route('/baum/<baumnummer>')
+def baum(baumnummer):
+    tree = Trees.query.filter_by(baumnummer=baumnummer).first()
+    return render_template("baum.html", baum=tree)

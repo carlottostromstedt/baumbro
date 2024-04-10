@@ -106,7 +106,7 @@ footer > p {
     height: 78vh;
 }
 
-.baueme-container {
+.baueme-container{
     height: 82vh;
     width: 45%;
     overflow: auto;
@@ -118,6 +118,37 @@ footer > p {
 
 .extractor-block{
     height: 100vh;
+}
+
+.inner-container-show {
+    padding: 10px;
+    border-color: white;
+    width: 80vw;
+    border-style: solid;
+}
+
+.baueme-container-show {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.outer-show-container {
+    align-items: center;
+}
+
+.map-container-show {
+    width: 83vw; 
+    height: 45vh;
+}
+
+.baum-link{
+    text-decoration: none;
+    color: white;
+}
+
+.baum-link:hover {
+    color: rgb(237, 237, 237);
 }
 
 @media only screen and (max-width: 600px) {
@@ -182,5 +213,10 @@ footer > p {
 
     .map{
         height: 50vh;
+    }  
+    
+    .map-container-show {
+        width: 90vw; 
+        height: 40vh;
     }
 }

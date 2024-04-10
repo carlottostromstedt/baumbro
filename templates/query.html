@@ -11,13 +11,15 @@
 <div class="baueme-container" >
 {% for baum in baeume %}
 
-<div class="inner-container">
-    <h3>{{ baum.baumnamedeu }}</h3>
-    <h3>{{ baum.baumnummer }}</h3>
-    <h3>{{ baum.latitude }}</h3>
-    <h3>{{ baum.longitude }}</h3>
-    <h3>{{ baum.kategorie }}</h3>
-</div>
+<a class="baum-link" href="/baum/{{baum.baumnummer}}">
+    <div class="inner-container">
+        <h3>{{ baum.baumnamedeu }}</h3>
+        <h3>{{ baum.baumnummer }}</h3>
+        <h3>{{ baum.latitude }}</h3>
+        <h3>{{ baum.longitude }}</h3>
+        <h3>{{ baum.kategorie }}</h3>
+    </div>
+</a>
 {% endfor %}
 </div>
 </div>
